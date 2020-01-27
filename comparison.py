@@ -2,7 +2,7 @@ from PIL import Image, ImageChops
 
 def compared(image1, image2):
     """
-    this part doesn't work
+    this part doesn't work :(
     """
     diff = ImageChops.difference(image1, image2)
     return diff
