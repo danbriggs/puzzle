@@ -41,7 +41,7 @@ def fill_in_pieces(image0, is_enough_edge, is_background, cutoff, sobel):
     of the same dimensions as the image at file name image0.
     This function will fill in is_enough_edge with Trues wherever sobel is greater than cutoff.
     It will fill is_background with Trues up to and including the one-pixel boundary of a puzzle piece."""
-    img = cv2.imread(image0,0)
+    img = cv2.imread(image0, 0)
     img1 = cv2.imread(image0)
     height = img.shape[0]
     width = img.shape[1]
