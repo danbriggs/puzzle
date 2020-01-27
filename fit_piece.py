@@ -33,7 +33,7 @@ def main():
         number0 = int(input('Red value:'))
         number1 = int(input('Green value:'))
         number2 = int(input('Blue value:'))
-        print('Frequency:', answers[number0, number1, number2])
+        print('Frequency of color:', answers[number0, number1, number2])
 
 
 if __name__ == '__main__':
