@@ -5,13 +5,16 @@ import time
 import cv2
 import random
 import numpy as np
+from PIL import Image
 import edgestats as es
 import pixelpath as pp
+import find_pieces as f_p
 import fillinthepieces as fp
 import listofpuzzles as lofp
 import findedges as fed
 import color_sobel as c_s
 import intersect1 as int1
+import comparison as cp
 from matplotlib import pyplot as plt
 
 filename = input('Filename of image:')
@@ -110,7 +113,7 @@ is_background = np.zeros((height2, width2), dtype=bool)
 #        if (hasbeenchecked[i,j]):
 #            RGB_img[i,j]=(0,0,0)
 
-scaled_color_sobels = c_s.make_color_sobels(filename,True)
+scaled_color_sobels = c_s.make_color_sobels(filename, False)
 scaled_color_sobel_y = scaled_color_sobels[0]
 scaled_color_sobel_x = scaled_color_sobels[1]
 scaled_color_sobel = scaled_color_sobels[2]
@@ -131,9 +134,10 @@ for i in range(height2):
 #fed.find_edges(hasbeenchecked_copy,filename,2000)
 #print(hasbeenchecked_copy)
 is_background_copy = np.copy(is_background)
-list_of_pieces = lofp.list_of_puzzles(is_background_copy,imgcolor2,sobely,sobelx,sobel,scaled_color_sobel,True)
+list_of_pieces = lofp.list_of_puzzles(is_background_copy,imgcolor2,sobely,sobelx,sobel,scaled_color_sobel,False)
 print("len(list_of_pieces): ",len(list_of_pieces))
 starting_points = []
+path = []
 for i in range(len(list_of_pieces)):
     if (len(list_of_pieces[i])>0):
         starting_points.append(list_of_pieces[i][0])
@@ -142,6 +146,13 @@ for i in range(len(list_of_pieces)):
     print("starting_points[",i,"]: ",starting_points[i])
     print("len(list_of_pieces[",i,"]): ",len(list_of_pieces[i]))
 #print("list_of_pieces: ",list_of_pieces)
+
+rotated_array = f_p.rotation_piece(list_of_pieces, "whole_puzzle.jpg", filename)
+compare = rotated_array[0]
+for i in range(len(rotated_array)):
+    if rotated_array[i] < compare:
+        compare = rotated_array
+cp.comparison(compare, "whole_puzzle.jpg", filename)
 
 plt.subplot(2,2,1),plt.imshow(sobelcopy[:,:,],cmap = 'gray')
 plt.title('Sobel Copy'), plt.xticks([]), plt.yticks([])
