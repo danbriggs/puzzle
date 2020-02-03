@@ -21,13 +21,13 @@ def comparison(compare, image, filename):
     height0 = 0
     width0 = 0
     comparing = (0, 0, 100, 100)
-    print(compare("tmp1rdo_s7u.jpg", image))
+    print(compared("tmp1rdo_s7u.jpg", image))
     for i in range(width1 - width):
         for j in range(height1 - height):
             img2.paste(img1, (i, j))
             img2.save("tmp1rdo_s7u.jpg")
-            if comparing > compare("tmp1rdo_s7u.jpg", image):
-                comparing = compare("tmp1rdo_s7u.jpg", image)
+            if comparing > compared("tmp1rdo_s7u.jpg", image):
+                comparing = compared("tmp1rdo_s7u.jpg", image)
                 height0 = j
                 width0 = i
     img2.past(img1, (height0, width0))

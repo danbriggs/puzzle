@@ -148,6 +148,7 @@ for i in range(len(list_of_pieces)):
 #print("list_of_pieces: ",list_of_pieces)
 
 rotated_array = f_p.rotation_piece(list_of_pieces, "whole_puzzle.jpg", filename)
+print(rotated_array)
 compare = rotated_array[0]
 for i in range(len(rotated_array)):
     if rotated_array[i] < compare:
