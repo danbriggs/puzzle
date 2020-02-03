@@ -11,13 +11,13 @@ def center(topstart, botstart, leftstart, rightstart):
 def matching(image, background, mask, start, array):
     """
     compares the image at filename image to the image as filename background.
-    start should be a pair (y, x) for the upper-left corner of image in background.
+    start should be a pair (x, y) for the upper-left corner of image in background.
     compares only those pixels where mask is true.
     mask must be the same dimensions as image.
-    the percent difference is appendid by a array.
+    the percent difference is appended by a array.
     """
     i1 = image
-    i2 = background.crop((int(start[0]), int(start[1]), int(start[0], i1.width), int(start[1], i1.height)))
+    i2 = background.crop((int(start[0]), int(start[1]), int(start[0] + i1.width), int(start[1] + i1.height)))
     pairs = zip(i1.getdata(), i2.getdata())
     if len(i1.getbands()) == 1:
         # for gray-scale jpegs
@@ -32,8 +32,15 @@ def rotate(image, background, start):
     array = []
     for i in range(360):
         rotated = image.rotate(i)
+        if i==72:
+            rotated.show()
         matching(rotated, background, 0, start, array)
     return array
+
+if __name__ == '__main__':
+    i2p = Image.open('incomplete2_piece.png')
+    i2 = Image.open('incomplete2.jpg')
+    rotate(i2p, i2, (100,100))
 
 def rotation_piece(puzzle_pieces, background, image):
     """

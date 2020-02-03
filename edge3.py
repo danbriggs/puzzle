@@ -29,6 +29,8 @@ RGB_img = cv2.cvtColor(imgcolordave, cv2.COLOR_BGR2RGB)
 imgcolor_pre = cv2.imread(filename)
 imgcolor = cv2.cvtColor(imgcolor_pre, cv2.COLOR_BGR2RGB)
 imgcolor2 = cv2.cvtColor(imgcolor_pre, cv2.COLOR_BGR2RGB)
+imgcolor_2 = np.copy(imgcolor)
+imgcolor_3 = np.copy(imgcolor)
 img1 = cv2.imread(filename, 0)
 print('shape of image', img1.shape)
 print('shape of color', imgcolor.shape)
@@ -101,7 +103,12 @@ height2 = imgcolor.shape[0]
 width2 = imgcolor.shape[1]
 
 is_enough_edge = np.zeros((height2, width2), dtype=bool)
+is_enough_edge2 = np.copy(is_enough_edge)
+is_enough_edge3 = np.copy(is_enough_edge)
+
 is_background = np.zeros((height2, width2), dtype=bool)
+is_background2 = np.copy(is_background)
+is_background3 = np.copy(is_background)
 
 #sobelx2 = cv2.Sobel(img1, cv2.CV_64F, 1, 0, ksize = 5)
 #sobely2 = cv2.Sobel(img1, cv2.CV_64F, 0, 1, ksize = 5)
@@ -123,13 +130,18 @@ sum = (sum_x*sum_x + sum_y*sum_y)**.5
 single_scaled_color_sobel = np.linalg.norm(scaled_color_sobel,axis=2)/1.733
 """Turns the three-channel sobel into a single number less than 1 at each pair of indices."""
 
-fp.fill_in_pieces(filename,is_enough_edge,is_background,.1,single_scaled_color_sobel) #was .1
+fp.fill_in_pieces(filename,is_enough_edge,is_background,.06,single_scaled_color_sobel) #was .1
+fp.fill_in_pieces(filename,is_enough_edge2,is_background2,.10,single_scaled_color_sobel) #was .1
+fp.fill_in_pieces(filename,is_enough_edge3,is_background3,.14,single_scaled_color_sobel) #was .1
 for i in range(height2):
     for j in range(width2):
         if (is_background[i,j]):
-            #print("type(imgcolor[",i,",",j,"]): ",type(imgcolor[i,j]))
-            #print("imgcolor[",i,",",j,"].shape: ",imgcolor[i,j].shape)
             imgcolor[i,j]=(0,0,0)
+        if (is_background2[i,j]):
+            imgcolor_2[i,j]=(0,0,0)
+        if (is_background3[i,j]):
+            imgcolor_3[i,j]=(0,0,0)
+
 
 #fed.find_edges(hasbeenchecked_copy,filename,2000)
 #print(hasbeenchecked_copy)
@@ -147,6 +159,41 @@ for i in range(len(list_of_pieces)):
     print("len(list_of_pieces[",i,"]): ",len(list_of_pieces[i]))
 #print("list_of_pieces: ",list_of_pieces)
 
+plt.subplot(2,2,1),plt.imshow(RGB_img[:,:,])
+plt.title('RGB_img'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,2),plt.imshow(img[:, :,],cmap = 'gray')
+plt.title('img'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,3),plt.imshow(sobelx[:, :,],cmap = 'gray')
+plt.title('sobel x'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,4),plt.imshow(sobely[:, :,],cmap = 'gray')
+plt.title('sobel y'), plt.xticks([]), plt.yticks([])
+
+plt.show()
+
+plt.subplot(2,2,1),plt.imshow(RGB_img[:,:,])
+plt.title('RGB_img'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,2),plt.imshow(scaled_color_sobel[:, :,])
+plt.title('scaled color sobel'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,3),plt.imshow(scaled_color_sobel_y[:, :,])
+plt.title('scaled color sobel y'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,4),plt.imshow(scaled_color_sobel_x[:, :,])
+plt.title('scaled color sobel x'), plt.xticks([]), plt.yticks([])
+
+plt.show()
+
+plt.subplot(2,2,1),plt.imshow(RGB_img[:,:,])
+plt.title('RGB_img'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,2),plt.imshow(imgcolor[:, :,])
+plt.title('cutoff: .06'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,3),plt.imshow(imgcolor_2[:, :,])
+plt.title('cutoff: .10'), plt.xticks([]), plt.yticks([])
+plt.subplot(2,2,4),plt.imshow(imgcolor_3[:, :,])
+plt.title('cutoff: .14'), plt.xticks([]), plt.yticks([])
+
+plt.show()
+
+
+
 rotated_array = f_p.rotation_piece(list_of_pieces, "whole_puzzle.jpg", filename)
 print(rotated_array)
 compare = rotated_array[0]
@@ -155,13 +202,3 @@ for i in range(len(rotated_array)):
         compare = rotated_array
 cp.comparison(compare, "whole_puzzle.jpg", filename)
 
-plt.subplot(2,2,1),plt.imshow(sobelcopy[:,:,],cmap = 'gray')
-plt.title('Sobel Copy'), plt.xticks([]), plt.yticks([])
-plt.subplot(2,2,2),plt.imshow(sobel[:, :,],cmap = 'gray')
-plt.title('sobel'), plt.xticks([]), plt.yticks([])
-plt.subplot(2,2,3),plt.imshow(sobelcopycopy[:, :,],cmap = 'gray')
-plt.title('Sobel Recurse'), plt.xticks([]), plt.yticks([])
-plt.subplot(2,2,4),plt.imshow(imgcolor[:, :,])
-plt.title('imgcolor'), plt.xticks([]), plt.yticks([])
-
-plt.show()
